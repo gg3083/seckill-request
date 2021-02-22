@@ -30,7 +30,6 @@ func (session *Session) DefaultClient() {
 	session.client = http.DefaultClient
 }
 
-
 func (session *Session) ClientProxy(proxy string) {
 	u := url.URL{}
 	if proxy == "" {
@@ -61,9 +60,8 @@ func (session *Session) AddHeader(maps map[string]string) {
 	for k, v := range maps {
 		header.Set(k, v)
 	}
+	session.Header = header
 }
-
-
 
 func (session *Session) SetCookie(cookie string) {
 	hdr := http.Header{}
@@ -74,8 +72,6 @@ func (session *Session) SetCookie(cookie string) {
 	session.Header = hdr
 }
 
-
-
 func (session *Session) Get(path string, params Params) error {
 	return session.Api(path, http.MethodGet, params)
 }
@@ -83,7 +79,6 @@ func (session *Session) Get(path string, params Params) error {
 func (session *Session) Post(path string, params Params) error {
 	return session.Api(path, http.MethodPost, params)
 }
-
 
 func (session *Session) PostForUrl(path string, params Params) error {
 	session.notHeader = true
@@ -232,5 +227,6 @@ func createFormReader(params Params) io.Reader {
 	for k, v := range params {
 		form.Add(k, fmt.Sprintf("%v", v))
 	}
+	log.Fatalf("请求的接口：%s", form.Encode())
 	return strings.NewReader(form.Encode())
 }
